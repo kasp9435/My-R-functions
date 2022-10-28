@@ -129,6 +129,8 @@ Routing <- function(w_camp,w_edge1.parts,max.dist) {
       }
     }
   }
+return(w_camp)
+return(w_edge1.parts)  
 cat("Alan has visited: ", has.visited) #These are the points and edge sections that Alan has visited
 cat("\nAlan has not visited: ", not.visited) #These are the points and edge sections that Alan has not visited
 cat("\nDistance traveled: ", dist.traveled) #The total distance traveled by Alan
