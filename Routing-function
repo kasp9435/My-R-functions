@@ -54,7 +54,7 @@ Routing <- function(w_camp,w_edge1.parts,max.dist) {
       #### Some for loop ####
       for (i in 1:length(w_camp)) {
         if(not.visited[ind]==string.camp[i]){
-          w_camp[i]<<-0 
+          w_camp[i]=0 
         }
       }
       
@@ -90,7 +90,7 @@ Routing <- function(w_camp,w_edge1.parts,max.dist) {
       } else if (c(Mat.dist.E1[1,-1])[ind]>c(Mat.dist.E1[1,-1])[ind+1]){
         A_coords=E1.new[ind,]
       }
-      w_edge1.parts[ind]<<-0
+      w_edge1.parts[ind]=0
     }
   
     #Update the distance matrices
