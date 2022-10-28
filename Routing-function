@@ -133,4 +133,6 @@ cat("Alan has visited: ", has.visited) #These are the points and edge sections t
 cat("\nAlan has not visited: ", not.visited) #These are the points and edge sections that Alan has not visited
 cat("\nDistance traveled: ", dist.traveled) #The total distance traveled by Alan
 cat("\nSum of weights: ", W) #The sum of the weights of the points and edges Alan has visited
+w_camp<<-w_camp
+w_edge1.parts<<-w_edge1.parts
 }
