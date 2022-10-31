@@ -137,4 +137,5 @@ w_camp<<-w_camp #This updates the weight of the camps to the global environment
 w_edge1.parts<<-w_edge1.parts #This updates the weight of the edges to the global environment
 has.visited<<-has.visited
 not.visited<<-not.visited
+P.update<<-P.update
 }
