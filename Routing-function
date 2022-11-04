@@ -1,40 +1,4 @@
 Routing <- function(w_camp,w_edge1.parts,max.dist) {
-  #The coordinates of Alan the drone is initially set to be the charging station
-  A_coords=C
-  
-  #The distance from the charging station to the points and to the endpoints
-  #of the edges are calculated separately
-  Mat.dist.Camp=as.matrix(dist(rbind(A_coords,P)))
-  Mat.dist.E1=as.matrix(dist(rbind(A_coords,E1.new)))
-  
-  ## Desirability ##
-  desirability_camp=w_camp/as.numeric(Mat.dist.Camp[1,-1])
-  desirability_edge1=rep(NA,num.edgeparts)
-  for (i in (1:num.edgeparts)) {
-    desirability_edge1[i]=w_edge1.parts[i]/(min(c(Mat.dist.E1[1,-1])[i],c(Mat.dist.E1[1,-1])[i+1])+c(Mat.dist.E1[(i+1),(i+2)]))
-  }
-
-  desirability=c(max(desirability_camp),max(as.numeric(desirability_edge1)))
-
-  has.visited=c("start")
-  #use this to fill the not visited vector:
-  string.camp=c()
-  for (i in 1:length(w_camp)) {
-    string.camp=c(string.camp,paste("C",i,sep=""))
-  }
-  string.E1=c()
-  for (i in 1:num.edgeparts) {
-    string.E1=c(string.E1,paste("e1.",i,sep=""))
-  }
-  not.visited=c(string.camp,string.E1,"end")
-  #note that e1.1 is the edge part between the first and second point
-
-  #W is the sum of the weights of the visited points
-  W=0
-  dist.traveled=0
-  # A matrix from which rows are removed when the points are visited
-  P.update=as.matrix(P)
-
   while ((dist.traveled+dist(rbind(A_coords,C)))<max.dist) {
   
     #When only the endpoint has not been visited, make Alan return
