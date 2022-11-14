@@ -74,8 +74,11 @@ Routing <- function(w_camp,bat.size) {
     }
     
     #Update the desirability
-    
-    desirability_camp=w_camp[-which(w_camp==0)]/as.numeric(Mat.dist.Camp[1,-1])
+    if(nrow(P.update)==N.P){
+      desirability_camp=w_camp/as.numeric(Mat.dist.Camp[1,-1])
+    }else{
+      desirability_camp=w_camp[-which(w_camp==0)]/as.numeric(Mat.dist.Camp[1,-1])
+    }
     desirability=c(max(desirability_camp))
     for (j in 1:N.E) {
       
