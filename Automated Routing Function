@@ -14,6 +14,7 @@ Routing <- function(w_camp,bat.size) {
     
     if(which(desirability==max(desirability))==1){#Is one of the points closest to the coordinates of Alan
       ind=as.numeric(which(desirability_camp==max(desirability_camp)))#The index for which point is closest
+      arrows(x0=A_coords[1],y0=A_coords[2],x1=P.update[ind,1],y1=P.update[ind,2],col="green",lty=2,lwd=2,length = 0.1)
       B=as.numeric(B+lambda*c(Mat.dist.Camp[1,-1])[ind])
       dist.traveled=as.numeric(dist.traveled+c(Mat.dist.Camp[1,-1])[ind])
       W=W+w_camp[ind]
@@ -46,7 +47,6 @@ Routing <- function(w_camp,bat.size) {
       if(length(ind)>1){
         ind=sample(ind, 1)
       }
-      
       #As the whole edge section must be traveled the distance between the endpoints is also added
       B=as.numeric(B+lambda*min(c(get(paste("Mat.dist.E",k,sep=""))[1,-1])[ind],c(get(paste("Mat.dist.E",k,sep=""))[1,-1])[ind+1])+lambda*c(get(paste("Mat.dist.E",k,sep=""))[(ind+1),(ind+2)]))
       #B=as.numeric(B+lambda*min(c(Mat.dist.E1[1,-1])[ind],c(Mat.dist.E1[1,-1])[ind+1])+lambda*c(Mat.dist.E1[(ind+1),(ind+2)]))
@@ -58,8 +58,16 @@ Routing <- function(w_camp,bat.size) {
       not.visited=not.visited[-c(which(not.visited==get(paste("string.E",k,sep=""))[ind]))]
       #string.E1=string.E1[-ind]
       if(c(get(paste("Mat.dist.E",k,sep=""))[1,-1])[ind]<c(get(paste("Mat.dist.E",k,sep=""))[1,-1])[ind+1]){#The coordinates of Alan is set to the endpoint that was furthest away
+        arrows(x0=A_coords[1],y0=A_coords[2],x1=get(paste("E_new.",k,sep=""))[ind,1],y1=get(paste("E_new.",k,sep=""))[ind,2],col="green",lty=2,lwd=2,length = 0.1)
+        arrows(x0=get(paste("E_new.",k,sep=""))[ind,1],y0=get(paste("E_new.",k,sep=""))[ind,2],
+               x1=get(paste("E_new.",k,sep=""))[(ind+1),1],y1=get(paste("E_new.",k,sep=""))[(ind+1),2],col="green",lty=2,lwd=2,length = 0.1)
+        
         A_coords=get(paste("E_new.",k,sep=""))[(ind+1),]
       } else if (c(get(paste("Mat.dist.E",k,sep=""))[1,-1])[ind]>c(get(paste("Mat.dist.E",k,sep=""))[1,-1])[ind+1]){
+        arrows(x0=A_coords[1],y0=A_coords[2],x1=get(paste("E_new.",k,sep=""))[(ind+1),1],y1=get(paste("E_new.",k,sep=""))[(ind+1),2],col="green",lwd=2,lty=2,length = 0.1)
+        arrows(x0=get(paste("E_new.",k,sep=""))[(ind+1),1],y0=get(paste("E_new.",k,sep=""))[(ind+1),2],
+               x1=get(paste("E_new.",k,sep=""))[(ind),1],y1=get(paste("E_new.",k,sep=""))[(ind),2],col="green",lty=2,lwd=2,length = 0.1)
+        
         A_coords=get(paste("E_new.",k,sep=""))[ind,]
       }
       dummy=get(paste("w_edge_parts.",k,sep=""))
