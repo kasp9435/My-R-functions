@@ -1,4 +1,5 @@
 Routing <- function(w_camp,bat.size) {
+  visited.coordinates=A_coords
   while ((B+lambda*dist(rbind(A_coords,C)))<bat.size) {
     
     #When only the endpoint has not been visited, make Alan return
@@ -28,6 +29,7 @@ Routing <- function(w_camp,bat.size) {
       has.visited=c(has.visited,not.visited[ind])
       not.visited=not.visited[-ind]
       A_coords=P.update[ind,]#The coordinates of Alan is updated
+      visited.coordinates=rbind(visited.coordinates,A_coords)
       if(nrow(P.update)>2){
         P.update=P.update[-ind,]#The point that has been visited is removed from P
         P.update=as.matrix(P.update)
@@ -63,12 +65,16 @@ Routing <- function(w_camp,bat.size) {
                x1=get(paste("E_new.",k,sep=""))[(ind+1),1],y1=get(paste("E_new.",k,sep=""))[(ind+1),2],col="green",lty=2,lwd=2,length = 0.1)
         
         A_coords=get(paste("E_new.",k,sep=""))[(ind+1),]
+        visited.coordinates=rbind(visited.coordinates,get(paste("E_new.",k,sep=""))[(ind),])
+        visited.coordinates=rbind(visited.coordinates,get(paste("E_new.",k,sep=""))[(ind+1),])
       } else if (c(get(paste("Mat.dist.E",k,sep=""))[1,-1])[ind]>c(get(paste("Mat.dist.E",k,sep=""))[1,-1])[ind+1]){
         arrows(x0=A_coords[1],y0=A_coords[2],x1=get(paste("E_new.",k,sep=""))[(ind+1),1],y1=get(paste("E_new.",k,sep=""))[(ind+1),2],col="green",lwd=2,lty=2,length = 0.1)
         arrows(x0=get(paste("E_new.",k,sep=""))[(ind+1),1],y0=get(paste("E_new.",k,sep=""))[(ind+1),2],
                x1=get(paste("E_new.",k,sep=""))[(ind),1],y1=get(paste("E_new.",k,sep=""))[(ind),2],col="green",lty=2,lwd=2,length = 0.1)
         
         A_coords=get(paste("E_new.",k,sep=""))[ind,]
+        visited.coordinates=rbind(visited.coordinates,get(paste("E_new.",k,sep=""))[(ind+1),])
+        visited.coordinates=rbind(visited.coordinates,get(paste("E_new.",k,sep=""))[(ind),])
       }
       dummy=get(paste("w_edge_parts.",k,sep=""))
       dummy[ind]=0
@@ -143,4 +149,32 @@ Routing <- function(w_camp,bat.size) {
   has.visited<<-has.visited
   not.visited<<-not.visited
   P.update<<-P.update
+  for (i in 2:(nrow(visited.coordinates)-1)) {
+   if(visited.coordinates[i,1]==visited.coordinates[(i+1),1]&visited.coordinates[i,2]==visited.coordinates[(i+1),2]){
+     visited.coordinates[i,]=c(NA,NA)
+   } 
+  }
+  #As some edge nodes act as both starting and end point of the edge pieces the duplicated values was set to NA
+  #These are now removed
+  visited.coordinates=na.omit(visited.coordinates)
+  rname=c("C")
+  for (i in 2:nrow(visited.coordinates)) {
+    for (j in 1:N.E) {
+      if(any(duplicated(rbind(visited.coordinates[i,],P)))){
+        ind=as.numeric(which(duplicated(rbind(visited.coordinates[i,],P))==TRUE))-1
+        rname=c(rname,row.names(P)[ind])
+      }else if(any(duplicated(rbind(visited.coordinates[i,],get(paste("E_new.",j,sep="")))))){
+        ind=as.numeric(which(duplicated(rbind(visited.coordinates[i,],get(paste("E_new.",j,sep=""))))==TRUE))-1
+        rname=c(rname,row.names(get(paste("E_new.",j,sep="")))[ind])
+      }
+      if(any(duplicated(rbind(visited.coordinates[i,],P)))&j==2){
+        rname=rname[1:(length(rname)-1)]
+      }
+    }
+    
+  }
+  rname<<-rname
+  row.names(visited.coordinates)<-rname
+  colnames(visited.coordinates)<-c("x","y")
+  visited.coordinates<<-as.data.frame(visited.coordinates)
 }
