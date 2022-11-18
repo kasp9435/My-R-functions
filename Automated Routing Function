@@ -112,6 +112,7 @@ Routing <- function(w_camp,bat.size) {
       if(as.numeric(B+lambda*c(Mat.dist.Camp[1,-1])[ind]+lambda*dist(rbind(C,P.update[ind,])))>=bat.size){#If the point is too far away
         B=B+lambda*dist(rbind(A_coords,C))
         dist.traveled=dist.traveled+dist(rbind(A_coords,C))
+        arrows(x0=A_coords[1],y0=A_coords[2],x1=C[1,1],y1=C[1,2],col="green",lty=2,lwd=2,length = 0.1)
         A_coords=C #Alan returns to the charging station
         break
       }
@@ -131,6 +132,7 @@ Routing <- function(w_camp,bat.size) {
       if (D+lambda*as.numeric(dist(rbind(C,new_coords)))>=bat.size){#If the edge section cannot be covered on the remaining battery
         B=B+lambda*dist(rbind(A_coords,C))
         dist.traveled=dist.traveled+dist(rbind(A_coords,C))
+        arrows(x0=A_coords[1],y0=A_coords[2],x1=C[1,1],y1=C[1,2],col="green",lty=2,lwd=2,length = 0.1)
         A_coords=C # Alan returns to the charging station
         break
       }
@@ -149,6 +151,8 @@ Routing <- function(w_camp,bat.size) {
   has.visited<<-has.visited
   not.visited<<-not.visited
   P.update<<-P.update
+  dist.traveled<<-dist.traveled
+  B<<-B
   for (i in 2:(nrow(visited.coordinates)-1)) {
    if(visited.coordinates[i,1]==visited.coordinates[(i+1),1]&visited.coordinates[i,2]==visited.coordinates[(i+1),2]){
      visited.coordinates[i,]=c(NA,NA)
@@ -177,4 +181,14 @@ Routing <- function(w_camp,bat.size) {
   row.names(visited.coordinates)<-rname
   colnames(visited.coordinates)<-c("x","y")
   visited.coordinates<<-as.data.frame(visited.coordinates)
+  if(anyDuplicated(E_names.1)>0){
+    ind=anyDuplicated(E_names.1)
+    E_names.1[ind]=paste(E_names.1[ind],".",1,sep="") 
+  }
+  if(anyDuplicated(E_names.2)>0){
+    ind=anyDuplicated(E_names.2)
+    E_names.2[ind]=paste(E_names.2[ind],".",1,sep="") 
+  }
+  E_names.1<<-E_names.1
+  E_names.2<<-E_names.2
 }
