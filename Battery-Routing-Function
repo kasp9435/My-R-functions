@@ -1,6 +1,6 @@
 Routing2 <- function(w_camp,bat.size) {
   visited.coordinates=A_coords
-  while ((B+lambda*dist(rbind(A_coords,C)))<bat.size) {
+  while ((B+c(Bat.mat[A_name,1]))<bat.size) {
     
     #When only the endpoint has not been visited, make Alan return
     if(length(not.visited)==1){
