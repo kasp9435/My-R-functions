@@ -72,16 +72,17 @@ Routing2 <- function(w_camp,bat.size) {
     
     desirability=c(max(desirability_camp))
     
-    dummy.ind=1+N.P
+    dummy.ind=2+N.P
     for (j in 1:N.E) {
-      dummy=get(paste("desirability_edge.",j,sep=""))
-      for (i in which(dummy>0)) {
-        dummy[i]=get(paste("w_edge_parts.",j,sep=""))[i]/((min(c(distance[A_name,(dummy.ind:(dummy.ind+get(paste("num.edgeparts.",j,sep=""))))])[i],
-                                                              c(distance[A_name,(dummy.ind:(dummy.ind+get(paste("num.edgeparts.",j,sep=""))))])[i+1]))+
-                                                            c(distance[(dummy.ind+i),(dummy.ind+1+i)]))
+      assign(paste("desirability_edge.",j,sep=""),rep(NA,get(paste("num.edgeparts.",j,sep="")))) 
+      dummy=rep(NA,length(get(paste("desirability_edge.",j,sep=""))))
+      for (i in (1:length(get(paste("desirability_edge.",j,sep=""))))) {
+        dummy[i]=get(paste("w_edge_parts.",j,sep=""))[i]/(min(c(distance[A_name,(dummy.ind:(dummy.ind+get(paste("num.edgeparts.",j,sep=""))))])[i],
+                                                              c(distance[A_name,(dummy.ind:(dummy.ind+get(paste("num.edgeparts.",j,sep=""))))])[i+1])+
+                                                            c(distance[(dummy.ind+i-1),(dummy.ind+i)]))
       }
       assign(paste("desirability_edge.",j,sep=""),dummy)
-      dummy.ind=dummy.ind+get(paste("num.edgeparts.",j,sep=""))
+      dummy.ind=dummy.ind+get(paste("num.edgeparts.",j,sep=""))+1
     }
     for (j in 1:N.E) {
       desirability=c(desirability,max(as.numeric(get(paste("desirability_edge.",j,sep=""))))) 
@@ -137,6 +138,7 @@ Routing2 <- function(w_camp,bat.size) {
   P.update<<-P.update
   dist.traveled<<-dist.traveled
   B<<-B
+  W<<-W
   for (i in 2:(nrow(visited.coordinates)-1)) {
     if(visited.coordinates[i,1]==visited.coordinates[(i+1),1]&visited.coordinates[i,2]==visited.coordinates[(i+1),2]){
       visited.coordinates[i,]=c(NA,NA)
