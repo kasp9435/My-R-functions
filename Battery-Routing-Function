@@ -19,11 +19,6 @@ Routing2 <- function(w_camp,bat.size) {
       dist.traveled=as.numeric(dist.traveled+c(distance[A_name,(2:(N.P+1))])[ind])
       W=W+w_camp[ind]
       w_camp[ind]=0
-      #for (i in 1:length(w_camp)) {
-      #  if(not.visited[ind]==string.camp[i]){
-      #    w_camp[i]=0 
-      #  }
-      #}
       A_coords=P.update[ind,]#The coordinates of Alan is updated
       A_name=rownames(P.update)[ind]
       has.visited=c(has.visited,A_name)
@@ -67,7 +62,7 @@ Routing2 <- function(w_camp,bat.size) {
       assign(paste("w_edge_parts.",k,sep=""),dummy)
     }
     
-    desirability_camp=w_camp/as.numeric(distance[A_name,P.names])
+    desirability_camp=w_camp/as.numeric(Bat.mat[A_name,P.names])
     desirability_camp[which(is.nan(desirability_camp)==TRUE)]=0
     
     desirability=c(max(desirability_camp))
@@ -77,9 +72,9 @@ Routing2 <- function(w_camp,bat.size) {
       assign(paste("desirability_edge.",j,sep=""),rep(NA,get(paste("num.edgeparts.",j,sep="")))) 
       dummy=rep(NA,length(get(paste("desirability_edge.",j,sep=""))))
       for (i in (1:length(get(paste("desirability_edge.",j,sep=""))))) {
-        dummy[i]=get(paste("w_edge_parts.",j,sep=""))[i]/(min(c(distance[A_name,(dummy.ind:(dummy.ind+get(paste("num.edgeparts.",j,sep=""))))])[i],
-                                                              c(distance[A_name,(dummy.ind:(dummy.ind+get(paste("num.edgeparts.",j,sep=""))))])[i+1])+
-                                                            c(distance[(dummy.ind+i-1),(dummy.ind+i)]))
+        dummy[i]=get(paste("w_edge_parts.",j,sep=""))[i]/(min(c(Bat.mat[A_name,(dummy.ind:(dummy.ind+get(paste("num.edgeparts.",j,sep=""))))])[i],
+                                                              c(Bat.mat[A_name,(dummy.ind:(dummy.ind+get(paste("num.edgeparts.",j,sep=""))))])[i+1])+
+                                                              c(Bat.mat[(dummy.ind+i-1),(dummy.ind+i)]))
       }
       assign(paste("desirability_edge.",j,sep=""),dummy)
       dummy.ind=dummy.ind+get(paste("num.edgeparts.",j,sep=""))+1
@@ -148,6 +143,7 @@ Routing2 <- function(w_camp,bat.size) {
   #These are now removed
   visited.coordinates=na.omit(visited.coordinates)
   rname=c("C")
+  
   for (i in 2:nrow(visited.coordinates)) {
     for (j in 1:N.E) {
       if(any(duplicated(rbind(visited.coordinates[i,],P)))){
@@ -157,11 +153,10 @@ Routing2 <- function(w_camp,bat.size) {
         ind=as.numeric(which(duplicated(rbind(visited.coordinates[i,],get(paste("E_new.",j,sep=""))))==TRUE))-1
         rname=c(rname,row.names(get(paste("E_new.",j,sep="")))[ind])
       }
-      if(any(duplicated(rbind(visited.coordinates[i,],P)))&j==2){
+      if(any(duplicated(rbind(visited.coordinates[i,],P)))&j>=2){
         rname=rname[1:(length(rname)-1)]
       }
     }
-    
   }
   rname<<-rname
   row.names(visited.coordinates)<-rname
