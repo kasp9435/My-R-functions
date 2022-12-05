@@ -8,14 +8,6 @@ distRoute <- function(adjmat, route) {
   return(d)
 }
 
-#### Create a random route ####
-randomRoute <- function(cities) {
-  start <- rownames(cities)[1]
-  route <- sample(rownames(cities)[-1])
-  route <- c(start,route,start) # return back home
-  return(route)
-}
-
 #### Swap entries in a route according to the 2-Opt method ####
 swap <- function(route,i,k) {
   new_route <- route[1:(i-1)]
