@@ -34,7 +34,8 @@ twoOpt <- function(Coordinates) {
   # compute adjacency matrix
   Coordinates=visited.coordinates
   
-  distmat <-Battery.matrix(wind_dir,wind_speed,Coordinates)
+  B.mat <- Battery.matrix(wind_dir,wind_speed,Coordinates)
+  distmat <-B.mat
   sum.manipulated.dist=0
   for (i in 2:(nrow(visited.coordinates)-1)) {
     
@@ -142,9 +143,8 @@ twoOpt <- function(Coordinates) {
   } # close while loop
   
   # return
-  return(list(distance = min_d,
-              route = best_route,
-              track_dist = track_dist)
+  return(list(distance = distRoute(B.mat,best_route),
+              route = best_route)
   )
   
 }
