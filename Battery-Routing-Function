@@ -110,8 +110,8 @@ Routing2 <- function(w_camp,bat.size) {
         new_coords.name=get(paste("E_names.",k,sep=""))[ind]
       }
       if (D+as.numeric(Bat.mat[new_coords.name,1])>=bat.size){#If the edge section cannot be covered on the remaining battery
-        B=B+Bat.mat[new_coords.name,1]
-        dist.traveled=dist.traveled+distance[new_coords.name,1]
+        B=B+Bat.mat[A_name,1]
+        dist.traveled=dist.traveled+distance[A_name,1]
         arrows(x0=A_coords[1],y0=A_coords[2],x1=C[1,1],y1=C[1,2],col="green",lty=2,lwd=2,length = 0.1)
         A_coords=C # Alan returns to the charging station
         break
