@@ -1,4 +1,4 @@
-Routing2 <- function(w_camp,bat.size) {
+Routing2 <- function(w_camp,Bat.mat) {
   visited.coordinates=A_coords
   while ((B+c(Bat.mat[A_name,1]))<bat.size) {
     
