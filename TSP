@@ -30,18 +30,15 @@ twoOpt <- function(Coordinates) {
   distmat<-B.mat
   sum.manipulated.dist=0
   for (i in 2:(nrow(visited.coordinates)-1)) {
-    
-    if(rname[i]%in%rname[!(rname %in% c("C", P.names,E_names.2))]&rname[i+1]%in%rname[!(rname %in% c("C", P.names,E_names.2))]){
-      
-      sum.manipulated.dist=sum.manipulated.dist+distmat[i,(i+1)]*0.9+distmat[(i+1),i]*0.9
-      distmat[i,(i+1)]=distmat[i,(i+1)]*0.1
-      distmat[(i+1),i]=distmat[(i+1),i]*0.1
-    }else if(rname[i]%in%rname[!(rname %in% c("C", P.names,E_names.1))]&rname[i+1]%in%rname[!(rname %in% c("C", P.names,E_names.1))]  ){
-      sum.manipulated.dist=sum.manipulated.dist+distmat[i,(i+1)]*0.9+distmat[(i+1),i]*0.9
-      distmat[i,(i+1)]=distmat[i,(i+1)]*0.1
-      distmat[(i+1),i]=distmat[(i+1),i]*0.1
-    }else{
-      distmat[i,i]=distmat[i,i]
+    for (j in 1:N.E) {
+      if(rname[i]%in%get(paste("E_names.",j,sep=""))&rname[i+1]%in%get(paste("E_names.",j,sep=""))){
+        
+        sum.manipulated.dist=sum.manipulated.dist+distmat[i,(i+1)]*0.9+distmat[(i+1),i]*0.9
+        distmat[i,(i+1)]=distmat[i,(i+1)]*0.1
+        distmat[(i+1),i]=distmat[(i+1),i]*0.1
+      }else{
+        distmat[i,i]=distmat[i,i]
+      } 
     }
   }
   sum.manipulated.dist<<-sum.manipulated.dist/2 #as you only travel the between the edge points once
