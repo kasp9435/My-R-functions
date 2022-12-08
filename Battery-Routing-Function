@@ -168,6 +168,6 @@ Routing2 <- function(w_camp,bat.size) {
       ind=anyDuplicated(dummy.names)
       dummy.names[ind]=paste(dummy.names[ind],".",1,sep="") 
     }
-    assign(paste("E_names.",j,sep=""),dummy.names)  
+    assign(paste("E_names.",j,sep=""),dummy.names,envir = .GlobalEnv)  
   }
 }
