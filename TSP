@@ -152,6 +152,7 @@ TSP.plot <- function(visited.coordinates) {
   plot(P, pch=19, col="red",
        main="", xlab = "", ylab="", 
        xlim=c(0,10), ylim=c(0,10), 
+       xaxt='n',yaxt='n',
        xaxs = "i", yaxs="i",
        bty="n")
   points(C,pch=19,col="green")
