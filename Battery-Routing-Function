@@ -162,14 +162,12 @@ Routing2 <- function(w_camp,bat.size) {
   row.names(visited.coordinates)<-rname
   colnames(visited.coordinates)<-c("x","y")
   visited.coordinates<<-as.data.frame(visited.coordinates)
-  if(anyDuplicated(E_names.1)>0){
-    ind=anyDuplicated(E_names.1)
-    E_names.1[ind]=paste(E_names.1[ind],".",1,sep="") 
+  for (j in 1:N.E) {
+    dummy.names=get(paste("E_names.",j,sep=""))
+    if(anyDuplicated(dummy.names)>0){
+      ind=anyDuplicated(dummy.names)
+      dummy.names[ind]=paste(dummy.names[ind],".",1,sep="") 
+    }
+    assign(paste("E_names.",j,sep=""),dummy.names)  
   }
-  if(anyDuplicated(E_names.2)>0){
-    ind=anyDuplicated(E_names.2)
-    E_names.2[ind]=paste(E_names.2[ind],".",1,sep="") 
-  }
-  E_names.1<<-E_names.1
-  E_names.2<<-E_names.2
 }
