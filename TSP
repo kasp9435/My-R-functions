@@ -1,7 +1,7 @@
 #### Calculate distance of a route ####
 distRoute <- function(adjmat, route) {
   d <- 0
-  #for(i in 2:(nrow(adjmat)+1)) {
+  #for(i in 2:length(route)) {
   for(i in 2:length(route)) {
     d <- d + adjmat[route[i-1],route[i]]
   }
