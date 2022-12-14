@@ -1,0 +1,55 @@
+Battery.matrix <- function(wind_dir,wind_speed,All_nodes){
+  # Determine direction in radians between all points
+  node_dir = matrix(rep(0,nrow(All_nodes)^2),nrow=nrow(All_nodes))
+  
+  for(i in 1:nrow(All_nodes)){
+    for(j in 1:nrow(All_nodes)){
+      if(All_nodes[j,1]==All_nodes[i,1]){
+        node_dir[i,j] = 0
+      }
+      else if(All_nodes[j,2] > All_nodes[i,2] & All_nodes[j,1] > All_nodes[i,1]){
+        node_dir[i,j] = atan((All_nodes[j,2]-All_nodes[i,2])/(All_nodes[j,1]-All_nodes[i,1]))
+      }
+      else if(All_nodes[j,1] < All_nodes[i,1]){
+        node_dir[i,j] = pi + atan((All_nodes[j,2]-All_nodes[i,2])/(All_nodes[j,1]-All_nodes[i,1]))
+      }
+      else if(All_nodes[j,2] < All_nodes[i,2] & All_nodes[j,1] > All_nodes[i,1]){
+        node_dir[i,j] = 2*pi + atan((All_nodes[j,2]-All_nodes[i,2])/(All_nodes[j,1]-All_nodes[i,1]))
+      }
+    }
+  }
+  
+  # Determining discharge coefficient
+  z_1=0.1;z_2=1.008
+  z_3=1.113;z_4=0.9999
+  discharge = matrix(rep(0,nrow(All_nodes)^2),nrow=nrow(All_nodes))
+  
+  for(i in 1:nrow(All_nodes)){
+    for(j in 1:nrow(All_nodes)){#Is the UAV flying in tailwinf
+      if(!dplyr::between(node_dir[i,j],wind_dir-pi/4,wind_dir+pi/4) &
+         !dplyr::between(node_dir[i,j],2*pi-wind_dir-pi/4,2*pi-wind_dir+pi/4) &
+         !dplyr::between(node_dir[i,j],2*pi+wind_dir-pi/4,2*pi+wind_dir+pi/4)){
+        discharge[i,j] = z_1*z_2^{wind_speed}
+      }
+      else{
+        discharge[i,j] = z_3-z_4^{-wind_speed}
+      }
+    }
+  }
+  
+  # Calculating battery consumption
+  distance = as.matrix(dist(All_nodes,diag=TRUE,upper=TRUE))
+  Bat.mat = matrix(rep(0,nrow(All_nodes)^2),nrow=nrow(All_nodes))
+  row.names(Bat.mat)<-row.names(All_nodes);colnames(Bat.mat)<-row.names(All_nodes)
+  for(i in 1:nrow(All_nodes)){
+    for(j in 1:nrow(All_nodes)){
+      Bat.mat[i,j] = discharge[i,j]*distance[i,j]
+    }
+  }
+  u=100 #number of meters in one unit
+  #### Make sure each element in the matrix is multiplied by 100
+  Bat.mat=Bat.mat*u#uses 0.1164 kj per meter
+  
+  distance<<-distance
+  Bat.mat<<-Bat.mat
+}
